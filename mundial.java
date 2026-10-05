@@ -177,3 +177,198 @@ class Mundial {
         {"Jordania", "Argentina", "J", "27 de junio", "21:00", "Dallas"}
     };
 
+// ============================================================
+    // MENÚ PRINCIPAL
+    // ============================================================
+
+    public static void main(String[] args) {
+
+        int opcion;
+
+        do {
+
+            System.out.println();
+            System.out.println("      ___________      ");
+            System.out.println("     '._==_==_=_.'     ");
+            System.out.println("     .-\\:      /-.    ");
+            System.out.println("    | (|:.     |) |    ");
+            System.out.println("     '-|:.     |-'     ");
+            System.out.println("       \\::.    /      ");
+            System.out.println("        '::. .'        ");
+            System.out.println("          ) (          ");
+            System.out.println("        _.' '._        ");
+            System.out.println("       '-------'       ");
+            System.out.println("==============================================");
+            System.out.println("          MUNDIAL DE FÚTBOL 2026");
+            System.out.println("==============================================");
+            System.out.println("1. Ver partidos");
+            System.out.println("2. Ver tabla de posiciones");
+            System.out.println("3. Ver banderas");
+            System.out.println("4. Salir");
+            System.out.println("==============================================");
+
+            opcion = ConsoleInput.getInt("Seleccione una opción: ");
+
+            switch (opcion) {
+
+                case 1:
+                    // Abrir el menú de partidos
+                    Partidos.menu();
+                    break;
+
+                case 2:
+                    // Mostrar tabla de posiciones
+                    TablaPosiciones tabla = new TablaPosiciones();
+
+                    System.out.println();
+                    System.out.println("==============================================");
+                    System.out.println("             TABLA DE POSICIONES");
+                    System.out.println("==============================================");
+
+                    tabla.mostrarTabla();
+
+                    break;
+
+                case 3:
+                    // Mostrar menú de banderas
+                    mostrarBanderas();
+                    break;
+
+                case 4:
+                    System.out.println();
+                    System.out.println("==============================================");
+                    System.out.println("     Gracias por utilizar el programa.");
+                    System.out.println("==============================================");
+                    break;
+
+                default:
+                    System.out.println();
+                    System.out.println("Opción no válida.");
+                    break;
+            }
+
+        } while (opcion != 4);
+    }
+
+
+    // ============================================================
+    // MENÚ DE BANDERAS (por grupos)
+    // ============================================================
+
+    public static void mostrarBanderas() {
+
+        int opcion;
+
+        do {
+
+            System.out.println();
+            System.out.println("==============================================");
+            System.out.println("                 BANDERAS");
+            System.out.println("==============================================");
+
+            for (int g = 0; g < GRUPOS.length; g++) {
+                System.out.println((g + 1) + ". Grupo " + LETRAS[g] + ": "
+                        + GRUPOS[g][0] + ", " + GRUPOS[g][1] + ", "
+                        + GRUPOS[g][2] + ", " + GRUPOS[g][3]);
+            }
+
+            System.out.println("13. Volver");
+            System.out.println("==============================================");
+
+            opcion = ConsoleInput.getInt("Seleccione un grupo: ");
+
+            switch (opcion) {
+
+                case 1:
+                    menuGrupoBanderas(0);
+                    break;
+                case 2:
+                    menuGrupoBanderas(1);
+                    break;
+                case 3:
+                    menuGrupoBanderas(2);
+                    break;
+                case 4:
+                    menuGrupoBanderas(3);
+                    break;
+                case 5:
+                    menuGrupoBanderas(4);
+                    break;
+                case 6:
+                    menuGrupoBanderas(5);
+                    break;
+                case 7:
+                    menuGrupoBanderas(6);
+                    break;
+                case 8:
+                    menuGrupoBanderas(7);
+                    break;
+                case 9:
+                    menuGrupoBanderas(8);
+                    break;
+                case 10:
+                    menuGrupoBanderas(9);
+                    break;
+                case 11:
+                    menuGrupoBanderas(10);
+                    break;
+                case 12:
+                    menuGrupoBanderas(11);
+                    break;
+
+                case 13:
+                    break;
+
+                default:
+                    System.out.println("Opción no válida.");
+                    break;
+            }
+
+        } while (opcion != 13);
+    }
+
+    public static void menuGrupoBanderas(int g) {
+
+        int opcion;
+
+        do {
+
+            System.out.println();
+            System.out.println("==============================================");
+            System.out.println("            BANDERAS - GRUPO " + LETRAS[g]);
+            System.out.println("==============================================");
+
+            for (int k = 0; k < 4; k++) {
+                System.out.println((k + 1) + ". " + GRUPOS[g][k]);
+            }
+
+            System.out.println("5. Volver");
+            System.out.println("==============================================");
+
+            opcion = ConsoleInput.getInt("Seleccione una bandera: ");
+
+            switch (opcion) {
+
+                case 1:
+                    dibujarBandera(GRUPOS[g][0]);
+                    break;
+                case 2:
+                    dibujarBandera(GRUPOS[g][1]);
+                    break;
+                case 3:
+                    dibujarBandera(GRUPOS[g][2]);
+                    break;
+                case 4:
+                    dibujarBandera(GRUPOS[g][3]);
+                    break;
+
+                case 5:
+                    break;
+
+                default:
+                    System.out.println("Opción no válida.");
+                    break;
+            }
+
+        } while (opcion != 5);
+    }
