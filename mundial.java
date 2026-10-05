@@ -1001,7 +1001,7 @@ class TablaPosiciones {
                 String nombre = Mundial.GRUPOS[g][k];
 
                 // Rellenar con espacios para alinear las columnas
-                while (nombre.length() < 22) {
+                while (nombre.length() < 22)   {
                     nombre = nombre + " ";
                 }
 
