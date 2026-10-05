@@ -990,11 +990,11 @@ class TablaPosiciones {
 
     public void mostrarTabla() {
 
-        for (int g = 0; g < Mundial.GRUPOS.length; g++) {
+        for (int g = 0; g < Mundial.GRUPOS.length; g++)  {
 
             System.out.println();
             System.out.println("GRUPO " + Mundial.LETRAS[g]);
-            System.out.println("Selección              PJ  PG  PE  PP  Pts");
+            System.out.println("Selección             PJ  PG  PE  PP  Pts");
 
             for (int k = 0; k < 4; k++) {
 
