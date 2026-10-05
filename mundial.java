@@ -372,3 +372,412 @@ class Mundial {
 
         } while (opcion != 5);
     }
+
+ // ============================================================
+    // DIBUJAR UNA BANDERA (9 filas x 21 columnas, píxel = 2 espacios)
+    // ============================================================
+
+    public static void dibujarBandera(String pais) {
+
+        // Buscar el descriptor del país en la matriz
+        String[] d = null;
+
+        for (int k = 0; k < BANDERAS.length; k++) {
+            if (BANDERAS[k][0].equals(pais)) {
+                d = BANDERAS[k];
+            }
+        }
+
+        if (d == null) {
+            System.out.println("No hay bandera para " + pais);
+            return;
+        }
+
+        System.out.println();
+        System.out.println(pais.toUpperCase());
+        System.out.println();
+
+        for (int i = 0; i < 9; i++) {
+
+            for (int j = 0; j < 21; j++) {
+
+                // 1) color de fondo según la base de la bandera
+                String celda = colorBase(d[1], d[2], d[3], d[4], i, j);
+
+                // 2) primer adorno (si cubre esta celda, cambia el color)
+                String extra = adorno(d[5], d[6], celda, i, j);
+                if (extra != null) {
+                    celda = extra;
+                }
+
+                // 3) segundo adorno
+                extra = adorno(d[7], d[8], celda, i, j);
+                if (extra != null) {
+                    celda = extra;
+                }
+
+                System.out.print(color(celda) + "  ");
+            }
+
+            System.out.print(ConsoleColors.RESET);
+            System.out.println();
+        }
+    }
+
+    // Convierte el nombre del color en la constante de ConsoleColors
+    public static String color(String nombre) {
+
+        switch (nombre) {
+            case "ROJO":     return ConsoleColors.RED_BACKGROUND;
+            case "BLANCO":   return ConsoleColors.WHITE_BACKGROUND;
+            case "AZUL":     return ConsoleColors.BLUE_BACKGROUND;
+            case "VERDE":    return ConsoleColors.GREEN_BACKGROUND;
+            case "AMARILLO": return ConsoleColors.YELLOW_BACKGROUND;
+            case "NEGRO":    return ConsoleColors.BLACK_BACKGROUND;
+            case "CELESTE":  return ConsoleColors.CYAN_BACKGROUND;
+            case "NARANJA":  return ConsoleColors.ORANGE_BACKGROUND;
+            case "GRANATE":  return ConsoleColors.PURPLE_BACKGROUND;
+            default:         return ConsoleColors.WHITE_BACKGROUND;
+        }
+    }
+
+    // Color de fondo de la celda (i = fila, j = columna)
+    public static String colorBase(String base, String c1, String c2, String c3, int i, int j) {
+
+        switch (base) {
+
+            case "LISO":
+                return c1;
+
+            case "H2":
+                if (i < 5) {
+                    return c1;
+                }
+                return c2;
+
+            case "H3":
+                switch (i / 3) {
+                    case 0:  return c1;
+                    case 1:  return c2;
+                    default: return c3;
+                }
+
+            case "H121":
+                if (i < 2 || i > 6) {
+                    return c1;
+                }
+                return c2;
+
+            case "H211":
+                if (i < 4) {
+                    return c1;
+                }
+                if (i < 6) {
+                    return c2;
+                }
+                return c3;
+
+            case "V3":
+                switch (j / 7) {
+                    case 0:  return c1;
+                    case 1:  return c2;
+                    default: return c3;
+                }
+
+            case "V2":
+                if (j < 10) {
+                    return c1;
+                }
+                return c2;
+
+            case "V2P":
+                if (j < 8) {
+                    return c1;
+                }
+                return c2;
+
+            case "V121":
+                if (j < 5 || j >= 16) {
+                    return c1;
+                }
+                return c2;
+
+            case "RAYAS":
+                if (i % 2 == 0) {
+                    return c1;
+                }
+                return c2;
+
+            case "PANAMA":
+                // Cuadrante blanco (arriba izquierda) con estrella azul
+                if (i < 5 && j < 10) {
+                    if ((i == 2 && j >= 4 && j <= 6) || (j == 5 && i >= 1 && i <= 3)) {
+                        return "AZUL";
+                    }
+                    return "BLANCO";
+                }
+                // Cuadrante rojo (arriba derecha)
+                if (i < 5) {
+                    return "ROJO";
+                }
+                // Cuadrante azul (abajo izquierda)
+                if (j < 10) {
+                    return "AZUL";
+                }
+                // Cuadrante blanco (abajo derecha) con estrella roja
+                if ((i == 6 && j >= 14 && j <= 16) || (j == 15 && i >= 5 && i <= 7)) {
+                    return "ROJO";
+                }
+                return "BLANCO";
+
+            default:
+                return c1;
+        }
+    }
+
+    // Adornos de la bandera: devuelve el color si cubre la celda, o null si no
+    public static String adorno(String tipo, String c, String fondo, int i, int j) {
+
+        int di = Math.abs(i - 4);    // distancia a la fila central
+        int dj = Math.abs(j - 10);   // distancia a la columna central
+
+        switch (tipo) {
+
+            case "TRI":        // triángulo al lado izquierdo
+                if (j <= 9 - 2 * di) {
+                    return c;
+                }
+                break;
+
+            case "TRIB":       // triángulo de Bosnia
+                if (j >= 6 + (i * 9) / 8 && j <= 15) {
+                    return c;
+                }
+                break;
+
+            case "ESTRELLASB": // estrellas junto al triángulo de Bosnia
+                if (i % 2 == 0 && j == 4 + (i * 9) / 8) {
+                    return c;
+                }
+                break;
+
+            case "EMB":        // escudo / emblema central
+                if (i >= 3 && i <= 5 && j >= 9 && j <= 11) {
+                    return c;
+                }
+                break;
+
+            case "HOJA":       // hoja de arce
+                if ((i >= 2 && i <= 6 && j >= 8 && j <= 12)
+                        || ((i == 1 || i == 7) && j >= 9 && j <= 11)) {
+                    return c;
+                }
+                break;
+
+            case "ESTRELLA":   // estrella (cruz) central
+                if ((i == 4 && dj <= 2) || (dj == 0 && di <= 2)) {
+                    return c;
+                }
+                break;
+
+            case "ESTRELLAH":  // estrella dentro del triángulo (Jordania)
+                if ((i == 4 && j >= 1 && j <= 3) || (j == 2 && i >= 3 && i <= 5)) {
+                    return c;
+                }
+                break;
+
+            case "ESTRELLAD":  // estrella a la derecha (Turquía)
+                if ((i == 4 && j >= 13 && j <= 15) || (j == 14 && i >= 3 && i <= 5)) {
+                    return c;
+                }
+                break;
+
+            case "DISCO":      // círculo grande central
+                if ((i - 4) * (i - 4) + (j - 10) * (j - 10) <= 9) {
+                    return c;
+                }
+                break;
+
+            case "DISCOP":     // círculo pequeño central
+                if ((i - 4) * (i - 4) + (j - 10) * (j - 10) <= 4) {
+                    return c;
+                }
+                break;
+
+            case "ESFERA":     // círculo sobre la unión de franjas (Portugal)
+                if ((i - 4) * (i - 4) + (j - 8) * (j - 8) <= 4) {
+                    return c;
+                }
+                break;
+
+            case "MEDIALUNA":  // media luna: círculo blanco menos otro círculo
+                if ((i - 4) * (i - 4) + (j - 10) * (j - 10) <= 6) {
+                    return fondo;
+                }
+                if ((i - 4) * (i - 4) + (j - 8) * (j - 8) <= 9) {
+                    return c;
+                }
+                break;
+
+            case "CRUZ":       // cruz centrada de lado a lado
+                if (i == 4 || j == 10) {
+                    return c;
+                }
+                break;
+
+            case "CRUZS":      // cruz suiza (brazos cortos)
+                if ((j >= 9 && j <= 11 && i >= 1 && i <= 7)
+                        || (i >= 3 && i <= 5 && j >= 7 && j <= 13)) {
+                    return c;
+                }
+                break;
+
+            case "NORDICA":    // cruz nórdica (desplazada a la izquierda)
+                if ((i >= 3 && i <= 5) || (j >= 5 && j <= 7)) {
+                    return c;
+                }
+                break;
+
+            case "NORDICA2":   // cruz nórdica con borde azul (Noruega)
+                if (i == 4 || j == 6) {
+                    return "AZUL";
+                }
+                if ((i >= 3 && i <= 5) || (j >= 5 && j <= 7)) {
+                    return c;
+                }
+                break;
+
+            case "ASPA":       // cruz diagonal (Escocia)
+                if (Math.abs(dj - 2.5 * di) <= 1.2) {
+                    return c;
+                }
+                break;
+
+            case "ROMBO":      // rombo (Brasil)
+                if (dj <= 9 - 2 * di) {
+                    return c;
+                }
+                break;
+
+            case "CANTON":     // rectángulo arriba a la izquierda
+                if (i < 5 && j < 9) {
+                    return c;
+                }
+                break;
+
+            case "UNION":      // canton tipo Union Jack (Australia y Nueva Zelanda)
+                if (i < 5 && j < 10) {
+                    if (i == 2 || j == 4 || j == 5) {
+                        return "ROJO";
+                    }
+                    if (j == 2 * i || j == 9 - 2 * i) {
+                        return "BLANCO";
+                    }
+                    return "AZUL";
+                }
+                break;
+
+            case "ESTRELLAS":  // Cruz del Sur
+                if ((i == 2 && j == 15) || (i == 4 && j == 18)
+                        || (i == 6 && j == 15) || (i == 4 && j == 12)) {
+                    return c;
+                }
+                break;
+
+            case "BANDAH":     // banda horizontal que se abre (Sudáfrica)
+                if (i == 4 || (i >= 3 && i <= 5 && j >= 8)) {
+                    return c;
+                }
+                break;
+
+            case "SIERRA":     // borde dentado a la izquierda (Catar)
+                if (j < 5 + (i % 2)) {
+                    return c;
+                }
+                break;
+
+            case "TAEGUK":     // círculo rojo y azul (Corea del Sur)
+                if ((i - 4) * (i - 4) + (j - 10) * (j - 10) <= 9) {
+                    if (i < 4) {
+                        return "ROJO";
+                    }
+                    return "AZUL";
+                }
+                break;
+
+            case "TRIGRAMAS":  // bloques negros en las esquinas (Corea del Sur)
+                if ((i <= 1 || i >= 7) && (j <= 2 || j >= 18)) {
+                    return c;
+                }
+                break;
+
+            case "FRANJAB":    // franja horizontal baja (Curazao)
+                if (i == 6) {
+                    return c;
+                }
+                break;
+
+            case "PUNTOS":     // dos estrellas arriba a la izquierda (Curazao)
+                if ((i == 1 && j == 2) || (i == 3 && j == 5)) {
+                    return c;
+                }
+                break;
+
+            case "TRIFRANJA":  // blanco-rojo-blanco (Cabo Verde)
+                if (i == 6) {
+                    return "ROJO";
+                }
+                if (i == 5 || i == 7) {
+                    return c;
+                }
+                break;
+
+            case "ANILLO":     // círculo de estrellas (Cabo Verde)
+                double anillo = ((i - 6) * (i - 6) + (j - 7) * (j - 7)) / 4.0;
+                if (anillo >= 0.7 && anillo <= 1.4 && (i + j) % 2 == 0) {
+                    return c;
+                }
+                break;
+
+            case "ESCRITURA":  // texto y espada (Arabia Saudita)
+                if ((i == 3 && j >= 4 && j <= 16 && j % 2 == 0)
+                        || (i == 6 && j >= 4 && j <= 16)) {
+                    return c;
+                }
+                break;
+
+            case "ESCRITURAC": // texto central (Irak)
+                if (i == 4 && j >= 6 && j <= 14 && j % 2 == 0) {
+                    return c;
+                }
+                break;
+
+            case "SOLP":       // sol pequeño (Argentina)
+                if ((i == 4 && j >= 9 && j <= 11) || (j == 10 && i >= 3 && i <= 5)) {
+                    return c;
+                }
+                break;
+
+            case "SOLC":       // sol en el canton (Uruguay)
+                if (i >= 1 && i <= 3 && j >= 3 && j <= 5) {
+                    return c;
+                }
+                break;
+
+            case "DIAG":       // banda diagonal (RD Congo)
+                double dist = Math.abs(j - 2.5 * (8 - i));
+                if (dist <= 1.5) {
+                    return c;
+                }
+                if (dist <= 3.0) {
+                    return "AMARILLO";
+                }
+                break;
+
+            default:           // "NADA"
+                break;
+        }
+
+        return null;
+    }
+}
